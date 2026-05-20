@@ -1,4 +1,14 @@
 BINARY=gatus
+GATUS_VERSION :=1.0.0
+
+podman-build:
+	podman build \
+	--platform linux/amd64 \
+	-t quay.io/rhn-support-gong/gatus:$(GATUS_VERSION) \
+	-f Dockerfile .
+
+podman-push:
+	podman push quay.io/rhn-support-gong/gatus:$(GATUS_VERSION)
 
 .PHONY: install
 install:
