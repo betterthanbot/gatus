@@ -1,6 +1,6 @@
 # Build the go application into a binary
 FROM golang:alpine AS builder
-RUN apk --update add ca-certificates
+RUN apk --update add ca-certificates busybox-static
 WORKDIR /app
 COPY . ./
 RUN go mod tidy -diff
@@ -15,8 +15,12 @@ FROM scratch
 COPY --from=builder /app/gatus .
 COPY --from=builder /app/config.yaml ./config/config.yaml
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY --from=builder /bin/busybox.static /bin/wget
 ENV GATUS_CONFIG_PATH=""
 ENV GATUS_LOG_LEVEL="INFO"
 ENV PORT="8080"
 EXPOSE ${PORT}
+USER 65534:65534
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+  CMD ["/bin/wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
 ENTRYPOINT ["/gatus"]
