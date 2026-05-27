@@ -1,5 +1,5 @@
 BINARY=gatus
-GATUS_VERSION :=1.0.1
+GATUS_VERSION :=1.0.2
 
 podman-build:
 	podman build \
