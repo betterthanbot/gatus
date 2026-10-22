@@ -9,7 +9,7 @@ import (
 	"github.com/TwiN/gatus/v5/client"
 	"github.com/TwiN/gatus/v5/config/endpoint"
 	"github.com/TwiN/gatus/v5/test"
-	"github.com/google/go-github/v48/github"
+	"github.com/google/go-github/v93/github"
 )
 
 func TestAlertProvider_Validate(t *testing.T) {
@@ -90,7 +90,10 @@ func TestAlertProvider_Send(t *testing.T) {
 			if err != nil && !strings.Contains(err.Error(), "failed to retrieve GitHub user") && !strings.Contains(err.Error(), "no such host") {
 				t.Error("expected no error, got", err.Error())
 			}
-			cfg.githubClient = github.NewClient(nil)
+			cfg.githubClient, err = github.NewClient()
+			if err != nil {
+				t.Fatal("expected no error creating GitHub client, got", err.Error())
+			}
 			client.InjectHTTPClient(&http.Client{Transport: scenario.MockRoundTripper})
 			err = scenario.Provider.Send(
 				&endpoint.Endpoint{Name: "endpoint-name", Group: "endpoint-group"},

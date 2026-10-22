@@ -1,6 +1,6 @@
 module github.com/TwiN/gatus/v5
 
-go 1.26.6
+go 1.26.10
 
 require (
 	code.gitea.io/sdk/gitea v0.25.1
@@ -16,7 +16,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ses v1.34.24
 	github.com/coreos/go-oidc/v3 v3.18.0
 	github.com/gofiber/fiber/v2 v2.52.14
-	github.com/google/go-github/v48 v48.2.0
+	github.com/google/go-github/v93 v93.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3
 	github.com/ishidawataru/sctp v0.0.0-20251114114122-19ddcbc6aae2
@@ -27,11 +27,11 @@ require (
 	github.com/registrobr/rdap v1.1.8
 	github.com/valyala/fasthttp v1.71.0
 	github.com/wcharczuk/go-chart/v2 v2.1.2
-	golang.org/x/crypto v0.54.0
+	golang.org/x/crypto v0.58.0
 	golang.org/x/oauth2 v0.36.0
-	golang.org/x/sync v0.22.0
+	golang.org/x/sync v0.24.0
 	google.golang.org/api v0.280.0
-	google.golang.org/grpc v1.82.1
+	google.golang.org/grpc v1.83.2
 	gopkg.in/mail.v2 v2.3.1
 	gopkg.in/yaml.v3 v3.0.1
 	modernc.org/sqlite v1.50.1
@@ -89,12 +89,12 @@ require (
 	go.opentelemetry.io/otel/trace v1.44.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.4 // indirect
 	golang.org/x/image v0.45.0 // indirect
-	golang.org/x/mod v0.38.0 // indirect
-	golang.org/x/net v0.57.0 // indirect
-	golang.org/x/sys v0.47.0 // indirect
-	golang.org/x/text v0.41.0 // indirect
-	golang.org/x/tools v0.48.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260519071638-aa98bba5eb94 // indirect
+	golang.org/x/mod v0.42.0 // indirect
+	golang.org/x/net v0.61.0 // indirect
+	golang.org/x/sys v0.49.0 // indirect
+	golang.org/x/text v0.43.0 // indirect
+	golang.org/x/tools v0.51.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	modernc.org/libc v1.72.3 // indirect

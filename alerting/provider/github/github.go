@@ -10,7 +10,7 @@ import (
 
 	"github.com/TwiN/gatus/v5/alerting/alert"
 	"github.com/TwiN/gatus/v5/config/endpoint"
-	"github.com/google/go-github/v48/github"
+	"github.com/google/go-github/v93/github"
 	"golang.org/x/oauth2"
 	"gopkg.in/yaml.v3"
 )
@@ -59,13 +59,13 @@ func (cfg *Config) Validate() error {
 		AccessToken: cfg.Token,
 	}))
 	// Create GitHub client
-	if baseURL == "https://github.com" {
-		cfg.githubClient = github.NewClient(httpClientWithStaticTokenSource)
-	} else {
-		cfg.githubClient, err = github.NewEnterpriseClient(baseURL, baseURL, httpClientWithStaticTokenSource)
-		if err != nil {
-			return fmt.Errorf("failed to create enterprise GitHub client: %w", err)
-		}
+	clientOptions := []github.ClientOptionsFunc{github.WithHTTPClient(httpClientWithStaticTokenSource)}
+	if baseURL != "https://github.com" {
+		clientOptions = append(clientOptions, github.WithEnterpriseURLs(baseURL, baseURL))
+	}
+	cfg.githubClient, err = github.NewClient(clientOptions...)
+	if err != nil {
+		return fmt.Errorf("failed to create GitHub client: %w", err)
 	}
 	// Retrieve the username once to validate that the token is valid
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -109,9 +109,9 @@ func (provider *AlertProvider) Send(ep *endpoint.Endpoint, alert *alert.Alert, r
 	}
 	title := "alert(gatus): " + ep.DisplayName()
 	if !resolved {
-		_, _, err := cfg.githubClient.Issues.Create(context.Background(), cfg.repositoryOwner, cfg.repositoryName, &github.IssueRequest{
-			Title: github.String(title),
-			Body:  github.String(provider.buildIssueBody(ep, alert, result)),
+		_, _, err := cfg.githubClient.Issues.Create(context.Background(), cfg.repositoryOwner, cfg.repositoryName, github.CreateIssueRequest{
+			Title: title,
+			Body:  github.Ptr(provider.buildIssueBody(ep, alert, result)),
 		})
 		if err != nil {
 			return fmt.Errorf("failed to create issue: %w", err)
@@ -127,8 +127,8 @@ func (provider *AlertProvider) Send(ep *endpoint.Endpoint, alert *alert.Alert, r
 		}
 		for _, issue := range issues {
 			if *issue.Title == title {
-				_, _, err = cfg.githubClient.Issues.Edit(context.Background(), cfg.repositoryOwner, cfg.repositoryName, *issue.Number, &github.IssueRequest{
-					State: github.String("closed"),
+				_, _, err = cfg.githubClient.Issues.Update(context.Background(), cfg.repositoryOwner, cfg.repositoryName, *issue.Number, github.UpdateIssueRequest{
+					State: github.Ptr("closed"),
 				})
 				if err != nil {
 					return fmt.Errorf("failed to close issue: %w", err)

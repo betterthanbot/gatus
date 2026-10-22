@@ -1,6 +1,6 @@
 # Build the go application into a binary
-FROM golang:1.26.6-alpine AS builder
-RUN apk --update add ca-certificates busybox-static
+FROM golang:1.26.10-alpine AS builder
+RUN apk add --no-cache ca-certificates busybox-static
 WORKDIR /app
 COPY . ./
 RUN go mod tidy -diff
